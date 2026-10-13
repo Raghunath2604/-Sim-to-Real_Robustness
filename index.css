@@ -1224,3 +1224,33 @@ code, pre {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   Architecture Section
+   ========================================================================== */
+
+.architecture-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.architecture-card:hover {
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.12);
+}
+
+.architecture-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: block;
+  margin: 0 auto;
+}

@@ -292,7 +292,15 @@
       <li><tt>dr_0.5_sensing</tt>: Aggressive physics DR (&plusmn;50%) + sensor noise (&sigma; = 0.10) + delay jitter (&tau; &isin; {0, 1}).</li>
     </ul>
 
+    <div class="full-width-fig">
+      <img src="architecture_diagram.png" alt="System Architecture and Pipeline">
+      <div class="fig-caption">
+        <span class="fig-num">Fig. 2.</span> End-to-end benchmark architecture across four decoupled stages: (1) Domain Perturbation Engine; (2) PPO Policy Synthesis Core; (3) Deterministic 25-Setting Grid Evaluation; and (4) Zero-Drift Real-Time Microservice Serving.
+      </div>
+    </div>
+
     <h2>IV. Empirical Results</h2>
+
     
     <table class="paper-table">
       <caption>TABLE I: Empirical Benchmark Summary on HalfCheetah-v5 (20 Runs &times; 1M Steps, Mean &plusmn; Std Dev)</caption>

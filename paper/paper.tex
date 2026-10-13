@@ -96,12 +96,14 @@ We evaluate four policy variants, each replicated across five distinct pseudo-ra
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\linewidth]{../results/robust_HalfCheetah-v5/robustness_grid.png}
-\caption{Comprehensive 5-axis perturbation grid on \texttt{HalfCheetah-v5}. Solid lines depict mean return across 5 training seeds; shaded bands denote $95\%$ confidence intervals. Evaluated across 25 deterministic settings (500 total evaluation episodes).}
-\label{fig:grid}
+\includegraphics[width=0.98\linewidth]{architecture_diagram.png}
+\caption{System architecture and evaluation pipeline across four decoupled stages: (1) Domain Perturbation Engine; (2) Vectorized PPO Policy Synthesis; (3) Deterministic 25-Setting Grid Evaluation; and (4) Zero-Drift Real-Time Microservice Serving.}
+\label{fig:arch}
 \end{figure*}
 
 \section{Empirical Results \& Analysis}
+
+
 
 \subsection{Nominal Performance vs. Retention Rate}
 Table~\ref{tab:summary} presents the empirical results across all 500 deterministic evaluation episodes. The \emph{Retention Rate} is defined as:

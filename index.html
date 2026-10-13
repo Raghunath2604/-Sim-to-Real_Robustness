@@ -37,7 +37,8 @@
         <a href="#demo" class="nav-link">Visual Demo</a>
         <a href="#findings" class="nav-link">Key Findings</a>
         <a href="#explorer" class="nav-link">Perturbation Explorer</a>
-        <a href="#benchmarks" class="nav-link">Benchmark Table</a>
+        <a href="#benchmarks" class="nav-link">Benchmarks</a>
+        <a href="#architecture" class="nav-link">Architecture</a>
         <a href="#deployment" class="nav-link">Deployment</a>
         <a href="#citation" class="nav-link">Citation</a>
       </nav>
@@ -430,8 +431,25 @@
     </div>
   </section>
 
+  <!-- Section: Architecture & Pipeline -->
+  <section class="section" id="architecture">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">SYSTEM ARCHITECTURE</span>
+        <h2 class="section-title">End-to-End Benchmark Pipeline</h2>
+        <p class="section-desc">
+          Four decoupled, modular stages: Physics &amp; Asynchrony Perturbation &rarr; Vectorized PPO Synthesis &rarr; Deterministic 25-Setting Grid Evaluation &rarr; Zero-Drift Real-Time Microservice Serving.
+        </p>
+      </div>
+
+      <div class="architecture-card">
+        <img src="assets/architecture_diagram.png" alt="Sim-to-Real Robustness Architecture &amp; Evaluation Pipeline" class="architecture-img" loading="lazy">
+      </div>
+    </div>
+  </section>
+
   <!-- Section 5: Production Deployment & Serving -->
-  <section class="section" id="deployment">
+  <section class="section bg-alt" id="deployment">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">REAL-TIME SERVING</span>

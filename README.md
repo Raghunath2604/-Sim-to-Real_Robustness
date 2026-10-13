@@ -82,7 +82,20 @@ The full study was executed across **20 runs** (4 variants $\times$ 5 seeds) tra
 
 ---
 
+## System Architecture & End-to-End Pipeline
+
+![Sim-to-Real Robustness Architecture & Pipeline](assets/architecture_diagram.png)
+
+The benchmark is structured across four decoupled, modular stages:
+1. **Perturbation Engine:** Gymnasium wrapper injecting link mass, ground friction, motor torque scaling, sensor noise, and FIFO action delay buffers into MuJoCo physics.
+2. **PPO Synthesis Core:** Continuous Actor-Critic MLP with Generalized Advantage Estimation (GAE), orthogonal weight initialization, and clipped surrogate objectives trained across 20M steps.
+3. **Deterministic Evaluation Grid:** 500 long-format evaluation runs evaluated across 25 perturbation settings with paired seeds and pre-registered Welch $t$-tests.
+4. **Production Microservice Serving:** Asynchronous FastAPI inference service packaging TorchScript JIT graphs with closed-loop acceptance verification ($0.000000$ drift, $19.52\text{ ms}$ $P_{95}$).
+
+---
+
 ## Architectural Principles
+
 
 1. **Non-Invasive Environment Wrapper:** The PPO algorithm remains untouched; perturbations live strictly in `PerturbedEnv` (`perturb.py`).
 2. **Nominal Identity:** An unperturbed specification reproduces plain MuJoCo rollouts bit-for-bit (verified by test).
