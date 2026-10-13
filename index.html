@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sim-to-Real Robustness in PPO | Domain Randomization Benchmark</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Quantifying Sim-to-Real Robustness in Proximal Policy Optimization (PPO) via Domain Randomization. 20M step benchmark across 5 perturbation axes with zero-drift deployment.">
+  <meta name="keywords" content="Reinforcement Learning, Sim-to-Real, Robotics, Domain Randomization, PPO, MuJoCo, HalfCheetah, Machine Learning Portfolio">
+  <meta name="author" content="Raghunathareddy GR">
+  
+  <!-- OpenGraph / Social Cards -->
+  <meta property="og:title" content="Quantifying Sim-to-Real Robustness in PPO via Domain Randomization">
+  <meta property="og:description" content="A rigorous empirical benchmark on HalfCheetah-v5 evaluating retention trade-offs, catastrophic latency collapse, and zero-drift deployment.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/demo_comparison.gif">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-brand">
+        <span class="brand-badge">S2R</span>
+        <span class="brand-text">Sim2Real Robustness</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#demo" class="nav-link">Visual Demo</a>
+        <a href="#findings" class="nav-link">Key Findings</a>
+        <a href="#explorer" class="nav-link">Perturbation Explorer</a>
+        <a href="#benchmarks" class="nav-link">Benchmark Table</a>
+        <a href="#deployment" class="nav-link">Deployment</a>
+        <a href="#citation" class="nav-link">Citation</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="https://github.com/Raghunath2604/-Sim-to-Real_Robustness" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="container hero-content">
+      
+      <div class="hero-badge-wrap">
+        <span class="pill-badge pill-pulse">
+          <span class="status-dot"></span>
+          20M Timesteps Trained &bull; Deterministic 25-Setting Grid Evaluation
+        </span>
+      </div>
+
+      <h1 class="hero-title">
+        Quantifying <span class="gradient-text">Sim-to-Real Robustness</span> in PPO via Domain Randomization
+      </h1>
+
+      <p class="hero-subtitle">
+        A systematic, reproducible empirical benchmark on continuous locomotion dynamics (HalfCheetah-v5). Evaluating nominal performance trade-offs, out-of-distribution retention bounds, and catastrophic temporal latency collapse.
+      </p>
+
+      <!-- Author and Meta Info -->
+      <div class="author-card">
+        <div class="author-info">
+          <span class="author-name">Raghunathareddy GR</span>
+          <span class="author-role">AI & Machine Learning &bull; REVA University, Bengaluru</span>
+        </div>
+        <div class="author-divider"></div>
+        <div class="package-info">
+          <span class="pkg-title">Software Package:</span>
+          <code class="pkg-code">sim2real-robustness (robust_rl)</code>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="hero-actions">
+        <a href="#demo" class="btn btn-primary btn-lg">
+          <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Watch Visual Comparison
+        </a>
+        <a href="#explorer" class="btn btn-secondary btn-lg">
+          <svg class="icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          Explore Perturbation Curves
+        </a>
+        <a href="https://github.com/Raghunath2604/-Sim-to-Real_Robustness" target="_blank" rel="noopener" class="btn btn-outline btn-lg">
+          View Code & Models
+        </a>
+      </div>
+
+      <!-- Metric Highlights Strip -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <span class="metric-value">20,000,000</span>
+          <span class="metric-label">Environment Steps Trained</span>
+          <span class="metric-sub">4 variants &times; 5 seeds &times; 1M steps</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-value">73%</span>
+          <span class="metric-label">Retention Under Perturbations</span>
+          <span class="metric-sub">dr_0.5_sensing vs 53% baseline</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-value">+979.5</span>
+          <span class="metric-label">Return Gain Under Delay</span>
+          <span class="metric-sub">Welch p = 0.03 over physics DR</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-value">0.000000</span>
+          <span class="metric-label">Deployment Equivalence Drift</span>
+          <span class="metric-sub">Bit-identical TorchScript serving</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Scientific Disclaimer Alert -->
+  <section class="disclaimer-section">
+    <div class="container">
+      <div class="disclaimer-banner">
+        <div class="disclaimer-icon">⚖️</div>
+        <div class="disclaimer-content">
+          <strong>Methodological Transparency & Hardware Proxy Notice:</strong>
+          This study rigorously evaluates Sim-to-Real transfer using a <em>perturbed MuJoCo physics simulation</em> as a controlled experimental proxy for real-world discrepancies (mass variations, ground friction shifts, motor degradation, sensor noise, and communication delays). No physical robot hardware was used. All reported metrics reflect actual empirical measurements collected on this benchmark.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: Visual Demonstration -->
+  <section class="section" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">PHYSICAL EVIDENCE</span>
+        <h2 class="section-title">Visual Proof of the Sim-to-Real Gap</h2>
+        <p class="section-desc">
+          Side-by-side rollout of policies on HalfCheetah-v5 exposed to an unmodeled 2-step actuation delay ($\tau = 2$). The baseline policy completely collapses due to temporal phase lag, while the domain-randomized policy continues sprinting forward.
+        </p>
+      </div>
+
+      <div class="demo-display-card">
+        <div class="demo-media-wrap">
+          <img src="assets/demo_comparison.gif" alt="Side-by-side comparison of baseline PPO vs Domain Randomized PPO under actuation delay" class="demo-gif" id="demo-media-img" loading="lazy">
+        </div>
+        
+        <div class="demo-telemetry">
+          <div class="telemetry-col telemetry-baseline">
+            <div class="telemetry-header">
+              <span class="telemetry-dot dot-red"></span>
+              <h3>Baseline PPO (Nominal Dynamics)</h3>
+            </div>
+            <div class="telemetry-stat">
+              <span class="t-label">Rollout Return:</span>
+              <span class="t-value t-danger">8.6</span>
+            </div>
+            <div class="telemetry-stat">
+              <span class="t-label">Perturbation:</span>
+              <span class="t-value">Action Delay = 2 steps</span>
+            </div>
+            <div class="telemetry-stat">
+              <span class="t-label">Failure Mode:</span>
+              <span class="t-value">Kinematic collapse, loss of gait cadence</span>
+            </div>
+            <p class="telemetry-desc">
+              Trained exclusively on deterministic nominal physics. When communication or servo lag delays actions by just 2 steps, control commands lag behind state observations, inducing resonance and instantaneous tripping.
+            </p>
+          </div>
+
+          <div class="telemetry-col telemetry-dr">
+            <div class="telemetry-header">
+              <span class="telemetry-dot dot-green"></span>
+              <h3>Domain-Randomized PPO (dr_0.5_sensing)</h3>
+            </div>
+            <div class="telemetry-stat">
+              <span class="t-label">Rollout Return:</span>
+              <span class="t-value t-success">1,845.2</span>
+            </div>
+            <div class="telemetry-stat">
+              <span class="t-label">Perturbation:</span>
+              <span class="t-value">Action Delay = 2 steps</span>
+            </div>
+            <div class="telemetry-stat">
+              <span class="t-label">Performance Retention:</span>
+              <span class="t-value">Stable high-speed forward gallop</span>
+            </div>
+            <p class="telemetry-desc">
+              Trained with randomized observation noise and temporal jitter. The policy learns feedback-robust closed-loop control that dampens high-frequency overreactions and retains full locomotion stability.
+            </p>
+          </div>
+        </div>
+
+        <div class="demo-cli-callout">
+          <span class="callout-label">Reproduce this visual locally:</span>
+          <code class="callout-code">python demo.py --axis action_delay --value 2 --steps 300 --out assets/demo_comparison.gif</code>
+          <button class="copy-btn" data-copy="python demo.py --axis action_delay --value 2 --steps 300 --out assets/demo_comparison.gif" title="Copy command">Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Core Empirical Discoveries -->
+  <section class="section bg-alt" id="findings">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">SCIENTIFIC CONTRIBUTIONS</span>
+        <h2 class="section-title">Key Empirical Insights</h2>
+        <p class="section-desc">
+          Pre-registered hypotheses evaluated against 500 deterministic evaluation episodes on continuous locomotion.
+        </p>
+      </div>
+
+      <div class="insights-grid">
+        <div class="insight-card">
+          <div class="insight-icon">📈</div>
+          <h3 class="insight-title">1. Monotonic Retention Trade-Off</h3>
+          <p class="insight-text">
+            Increasing domain randomization strength strictly improves retention rate under perturbations from <strong>53% (baseline) &rarr; 60% (dr_0.2) &rarr; 70% (dr_0.5) &rarr; 73% (dr_0.5_sensing)</strong>. Nominal return incurs a modest, predictable penalty from 2,407 to 1,918.
+          </p>
+          <div class="insight-metric-tag">Hypothesis H3 Confirmed</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon">🛡️</div>
+          <h3 class="insight-title">2. Massive Physical Resilience</h3>
+          <p class="insight-text">
+            Under severe body mass variations, randomized policies improved mean return from 599.71 to <strong>1,089.03 (+81.6% improvement)</strong>. Under motor gear degradation, returns jumped from 756.44 to <strong>1,227.99 (+62.3% improvement)</strong>.
+          </p>
+          <div class="insight-metric-tag">Hypothesis H2 Confirmed</div>
+        </div>
+
+        <div class="insight-card highlight-card">
+          <div class="insight-icon">⚠️</div>
+          <h3 class="insight-title">3. The Latency Trap: No Cross-Transfer</h3>
+          <p class="insight-text">
+            Action delay causes catastrophic collapse in both baseline (return: 10.3) and pure physics DR (59.9 and 170.6). Only temporal-exposure variants sustained <strong>989.76 (&Delta; = +979.45, Welch p = 0.03)</strong>. <em>Randomizing masses and frictions does NOT protect against latency.</em>
+          </p>
+          <div class="insight-metric-tag highlight-tag">Hypothesis H4 Confirmed (p = 0.03)</div>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon">🏗️</div>
+          <h3 class="insight-title">4. Safety Floor Protection</h3>
+          <p class="insight-text">
+            Across all 25 perturbation settings, the worst-case episode return floor improved by <strong>3.3&times;</strong>, elevating from <strong>-331.99</strong> in baseline to <strong>-101.09</strong> in <code>dr_0.5_sensing</code>, eliminating catastrophic tumbling.
+          </p>
+          <div class="insight-metric-tag">Worst-Case Floor Boost</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Interactive Perturbation Explorer -->
+  <section class="section" id="explorer">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">INTERACTIVE DATA EXPLORER</span>
+        <h2 class="section-title">Perturbation Response Curves</h2>
+        <p class="section-desc">
+          Inspect how each policy variant responds as individual physical axes are pushed beyond their nominal bounds.
+        </p>
+      </div>
+
+      <div class="explorer-card">
+        <!-- Explorer Navigation Tabs -->
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="grid">Full 5-Axis Grid</button>
+          <button class="tab-btn" data-tab="delay">Action Delay (Latency)</button>
+          <button class="tab-btn" data-tab="mass">Body Mass</button>
+          <button class="tab-btn" data-tab="gain">Motor Gain (Torque)</button>
+          <button class="tab-btn" data-tab="friction">Ground Friction</button>
+          <button class="tab-btn" data-tab="noise">Sensor Noise</button>
+        </div>
+
+        <!-- Explorer Display Content -->
+        <div class="explorer-view">
+          <div class="explorer-image-container">
+            <img src="results/robust_HalfCheetah-v5/robustness_grid.png" alt="Perturbation Response Curves" id="explorer-image" class="explorer-img" loading="lazy">
+          </div>
+          
+          <div class="explorer-info-panel" id="explorer-info">
+            <div class="panel-header">
+              <span class="panel-tag" id="panel-tag">MULTI-AXIS SYNTHESIS</span>
+              <h3 class="panel-title" id="panel-title">Comprehensive 5-Axis Perturbation Grid</h3>
+            </div>
+            <p class="panel-desc" id="panel-desc">
+              Evaluated across 25 perturbation settings covering body mass multipliers [0.5&times;, 1.8&times;], ground friction multipliers [0.3&times;, 2.0&times;], actuator gear scaling [0.6&times;, 1.4&times;], sensor observation noise [&sigma; = 0.2], and actuation delay [&tau; = 1, 2 steps].
+            </p>
+            <div class="panel-stats" id="panel-stats">
+              <div class="p-stat">
+                <span class="p-label">Total Evaluation Rows:</span>
+                <span class="p-val">500 Episodes</span>
+              </div>
+              <div class="p-stat">
+                <span class="p-label">Evaluation Seeds:</span>
+                <span class="p-val">5 Paired Seeds</span>
+              </div>
+              <div class="p-stat">
+                <span class="p-label">Evaluation Mode:</span>
+                <span class="p-val">Deterministic ($\mu$ actions)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Quantitative Benchmark Table -->
+  <section class="section bg-alt" id="benchmarks">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">EMPIRICAL BENCHMARKS</span>
+        <h2 class="section-title">Comprehensive Quantitative Summary</h2>
+        <p class="section-desc">
+          Measured outcomes on HalfCheetah-v5 across all 20 training runs (mean &plusmn; sample std dev).
+        </p>
+      </div>
+
+      <div class="table-responsive-card">
+        <table class="benchmark-table">
+          <thead>
+            <tr>
+              <th>Policy Variant</th>
+              <th>Nominal Return</th>
+              <th>Retention Rate</th>
+              <th>Worst-Case Return</th>
+              <th>Mass Resilience</th>
+              <th>Delay Resilience</th>
+              <th>Overall Rank</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="variant-cell">
+                  <span class="variant-name">baseline</span>
+                  <span class="variant-sub">Nominal dynamics only</span>
+                </div>
+              </td>
+              <td class="font-bold">2,407.92 &plusmn; 1725.80</td>
+              <td><span class="badge-retention badge-low">53% &plusmn; 13%</span></td>
+              <td class="text-danger">-331.99 &plusmn; 98.90</td>
+              <td>599.71 &plusmn; 546.60</td>
+              <td class="text-danger">10.32 &plusmn; 8.87</td>
+              <td><span class="badge-rank">Rank 4 (Fragile)</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="variant-cell">
+                  <span class="variant-name">dr_0.2</span>
+                  <span class="variant-sub">Mild physics DR (&plusmn;20%)</span>
+                </div>
+              </td>
+              <td>2,201.58 &plusmn; 1562.02</td>
+              <td><span class="badge-retention badge-mid">60% &plusmn; 5%</span></td>
+              <td>-291.97 &plusmn; 226.98</td>
+              <td>846.36 &plusmn; 673.80</td>
+              <td class="text-danger">59.92 &plusmn; 61.12</td>
+              <td><span class="badge-rank">Rank 3</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="variant-cell">
+                  <span class="variant-name">dr_0.5</span>
+                  <span class="variant-sub">Aggressive physics DR (&plusmn;50%)</span>
+                </div>
+              </td>
+              <td>1,889.23 &plusmn; 1287.78</td>
+              <td><span class="badge-retention badge-high">70% &plusmn; 5%</span></td>
+              <td>-252.68 &plusmn; 134.41</td>
+              <td class="font-bold text-success">1,089.03 &plusmn; 815.70</td>
+              <td>170.62 &plusmn; 156.40</td>
+              <td><span class="badge-rank">Rank 2</span></td>
+            </tr>
+            <tr class="row-champion">
+              <td>
+                <div class="variant-cell">
+                  <span class="variant-name champion-text">dr_0.5_sensing ⭐</span>
+                  <span class="variant-sub">Physics DR + Sensor & Delay Jitter</span>
+                </div>
+              </td>
+              <td>1,918.71 &plusmn; 1682.59</td>
+              <td><span class="badge-retention badge-champion">73% &plusmn; 11%</span></td>
+              <td class="text-success font-bold">-101.09 &plusmn; 259.05</td>
+              <td>1,032.55 &plusmn; 834.10</td>
+              <td class="text-success font-bold">989.76 &plusmn; 849.25</td>
+              <td><span class="badge-rank badge-champ-rank">Champion (Robust)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footnote">
+        <span>* Retention Rate defined as: <code>Mean Perturbed Return / Nominal Return</code> across all 24 off-nominal grid settings.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Production Deployment & Serving -->
+  <section class="section" id="deployment">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">REAL-TIME SERVING</span>
+        <h2 class="section-title">Zero-Drift Microservice Deployment</h2>
+        <p class="section-desc">
+          Validation of deployed policies under real-world runtime constraints: TorchScript export, FastAPI microservice, and closed-loop acceptance tests.
+        </p>
+      </div>
+
+      <div class="deploy-grid">
+        <div class="deploy-card">
+          <h3 class="deploy-title">FastAPI Inference Microservice</h3>
+          <p class="deploy-text">
+            Policies are packaged into lightweight, high-performance TorchScript inference artifacts and exposed via a standard REST API endpoint <code>POST /act</code>.
+          </p>
+          
+          <div class="code-box">
+            <div class="code-header">
+              <span>Terminal</span>
+              <button class="copy-btn" data-copy="python -m robust_rl.deploy --model runs/robust_HalfCheetah-v5/dr_0.5_sensing/seed_1/model.pt --host 0.0.0.0 --port 8000">Copy</button>
+            </div>
+            <pre><code>python -m robust_rl.deploy \
+  --model runs/robust_HalfCheetah-v5/dr_0.5_sensing/seed_1/model.pt \
+  --host 0.0.0.0 --port 8000</code></pre>
+          </div>
+
+          <div class="deploy-stats">
+            <div class="d-stat">
+              <span class="d-label">Mean Latency</span>
+              <span class="d-val text-success">10.65 ms</span>
+            </div>
+            <div class="d-stat">
+              <span class="d-label">95th Percentile</span>
+              <span class="d-val text-success">19.52 ms</span>
+            </div>
+            <div class="d-stat">
+              <span class="d-label">Drift Equivalence</span>
+              <span class="d-val text-success">0.000000</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="deploy-card">
+          <h3 class="deploy-title">Closed-Loop Acceptance Testing</h3>
+          <p class="deploy-text">
+            Simulated robot runs a full 1,000-step episode in closed loop against the live HTTP microservice under active sensor noise (&sigma; = 0.20) and compares bit-for-bit against local offline rollouts.
+          </p>
+          
+          <div class="test-result-box">
+            <div class="tr-row">
+              <span class="tr-label">Offline Local Return:</span>
+              <span class="tr-val">792.0000</span>
+            </div>
+            <div class="tr-row">
+              <span class="tr-label">Served HTTP Return:</span>
+              <span class="tr-val">792.0000</span>
+            </div>
+            <div class="tr-row">
+              <span class="tr-label">Absolute Difference:</span>
+              <span class="tr-val text-success font-bold">0.000000 (Bit-Identical)</span>
+            </div>
+            <div class="tr-badge">
+              <span class="status-dot"></span> Acceptance Test Passed
+            </div>
+          </div>
+
+          <div class="code-box">
+            <div class="code-header">
+              <span>PowerShell Task Runner</span>
+              <button class="copy-btn" data-copy="powershell -File .\make.ps1 test">Copy</button>
+            </div>
+            <pre><code>powershell -File .\make.ps1 test  # 44/44 unit tests passing</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Citation & BibTeX -->
+  <section class="section bg-alt" id="citation">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">REPRODUCIBILITY & ATTRIBUTION</span>
+        <h2 class="section-title">BibTeX Citation</h2>
+        <p class="section-desc">
+          If you use this benchmark, methodology, or perturbation wrappers in your research, please cite this work:
+        </p>
+      </div>
+
+      <div class="citation-box">
+        <div class="citation-header">
+          <span>BibTeX Entry</span>
+          <button class="btn btn-sm btn-outline" id="copy-citation-btn">Copy BibTeX</button>
+        </div>
+        <pre><code id="bibtex-content">@software{raghunath2026sim2real,
+  author       = {Raghunathareddy, GR},
+  title        = {Quantifying Sim-to-Real Robustness in PPO via Domain Randomization},
+  year         = {2026},
+  institution  = {REVA University, Bengaluru},
+  url          = {https://github.com/Raghunath2604/-Sim-to-Real_Robustness},
+  note         = {A benchmark suite across 5 perturbation axes with closed-loop acceptance testing}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-left">
+        <span class="brand-badge">S2R</span>
+        <span class="footer-brand">Sim-to-Real Robustness Benchmark</span>
+        <p class="footer-sub">Department of AI & ML &bull; REVA University, Bengaluru &bull; MIT License</p>
+      </div>
+      <div class="footer-right">
+        <a href="https://github.com/Raghunath2604/-Sim-to-Real_Robustness" target="_blank" rel="noopener" class="footer-link">GitHub Repository</a>
+        <a href="https://github.com/Raghunath2604/-Sim-to-Real_Robustness/blob/main/docs/RESULTS_TEMPLATE.md" target="_blank" rel="noopener" class="footer-link">Empirical Results Doc</a>
+        <a href="https://github.com/Raghunath2604/-Sim-to-Real_Robustness/blob/main/LICENSE" target="_blank" rel="noopener" class="footer-link">MIT License</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="index.js"></script>
+</body>
+</html>
