@@ -1,0 +1,11 @@
+variant,axis,mean_return,ci95,delta_vs_baseline,welch_p
+baseline,friction,1000.0,0.0,,
+baseline,mass,1000.0,0.0,,
+baseline,gain,1000.0,0.0,,
+baseline,obs_noise,678.8888888888888,527.0408644572549,,
+baseline,action_delay,9.0,0.0,,
+dr_0.5,friction,1000.0,0.0,0.0,
+dr_0.5,mass,1000.0,0.0,0.0,
+dr_0.5,gain,1000.0,0.0,0.0,
+dr_0.5,obs_noise,937.3333333333334,134.81645219881648,258.44444444444457,0.16273776218305827
+dr_0.5,action_delay,9.888888888888891,3.13493119630581,0.8888888888888911,0.3468027352578183
