@@ -6,14 +6,15 @@
 [![MuJoCo 3.15+](https://img.shields.io/badge/MuJoCo-3.15.0-orange.svg)](https://mujoco.org/)
 [![Tests Passing](https://img.shields.io/badge/tests-44%2F44%20passing-brightgreen.svg)](tests/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Project Website](https://img.shields.io/badge/Project%20Website-Live%20Demo-8b5cf6.svg)](https://raghunath2604.github.io/-Sim-to-Real_Robustness/)
+[![Project Website](https://img.shields.io/badge/Project%20Website-Live%20on%20Vercel-000000.svg?logo=vercel&logoColor=white)](https://sim-to-real-robustness-plum.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Author:** Raghunathareddy GR  
 **Institution:** Department of Artificial Intelligence and Machine Learning, REVA University, Bengaluru, India  
 **Software Package:** `sim2real-robustness` (Python package `robust_rl`)  
-**Interactive Project Page:** [raghunath2604.github.io/-Sim-to-Real_Robustness](https://raghunath2604.github.io/-Sim-to-Real_Robustness/)  
+**Live Interactive Website:** [sim-to-real-robustness-plum.vercel.app](https://sim-to-real-robustness-plum.vercel.app/)  
 **GitHub Repository:** [Raghunath2604/-Sim-to-Real_Robustness](https://github.com/Raghunath2604/-Sim-to-Real_Robustness.git)
+
 
 
 ---
