@@ -186,8 +186,9 @@ def make_perturbed_env(
     fixed: PerturbationSpec | None = None,
     randomization: DomainRandomization | None = None,
     seed: int = 0,
+    render_mode: str | None = None,
 ) -> gym.Env:
-    env = gym.make(env_id)
+    env = gym.make(env_id, render_mode=render_mode) if render_mode else gym.make(env_id)
     needs_noise = (fixed is not None and fixed.obs_noise > 0) or (
         randomization is not None and randomization.obs_noise_max > 0
     )

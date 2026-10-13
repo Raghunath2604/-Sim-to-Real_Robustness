@@ -25,6 +25,14 @@ This repository provides an end-to-end, reproducible research instrument that ri
 
 ---
 
+## Visual Demonstration: Baseline vs. Domain-Randomized Policy
+
+![Baseline vs Domain-Randomized Policy under Delay](assets/demo_comparison.gif)
+
+*Figure: Side-by-side rollout on HalfCheetah-v5 under an unmodeled 2-step actuation delay. The baseline policy (left, trained exclusively on nominal dynamics) fails to recover from temporal phase lag, whereas the domain-randomized policy (`dr_0.5_sensing`, right) maintains a stable, fast forward gallop.*
+
+---
+
 ## Key Experimental Findings (HalfCheetah-v5 Benchmark)
 
 The full study was executed across **20 runs** (4 variants $\times$ 5 seeds) trained for **1,000,000 timesteps each** ($20\times 10^6$ total environment steps) and evaluated across **25 perturbation settings** (500 long-format evaluation rows).
@@ -122,6 +130,17 @@ make robust-quick           # Linux / macOS
 # Trains 20 models across 4 parallel jobs, evaluates 25 settings, generates figures
 make robust-all RJOBS=4          # Linux / macOS
 .\make.ps1 robust-all -RJOBS 4   # Windows
+```
+
+### 5. Render Visual Comparisons & Demonstrations (`demo.py`)
+
+```bash
+# Generate side-by-side video/GIF comparing Baseline vs. Domain-Randomized policies under disturbance
+python demo.py --compare --axis action_delay --value 2 --steps 200 --out assets/demo_comparison.gif
+
+# Or via make / make.ps1:
+make demo               # Linux / macOS
+.\make.ps1 demo         # Windows
 ```
 
 ---

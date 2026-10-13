@@ -87,7 +87,10 @@ switch ($Target.ToLower()) {
     "closed-loop" {
         & $py -m robust_rl.closed_loop --url http://localhost:8000 --env-id $RENV --axis gain --value 1.5 --episodes 3
     }
+    "demo" {
+        & $py -m robust_rl.demo --compare --axis action_delay --value 2 --steps 150 --fps 20 --out assets/demo_comparison.gif
+    }
     default {
-        Write-Error "Unknown target '$Target'. Available targets: test, lint, fmt, smoke, train, robust-quick, robust-train, robust-eval, robust-report, robust-all, export, serve, closed-loop"
+        Write-Error "Unknown target '$Target'. Available targets: test, lint, fmt, smoke, train, robust-quick, robust-train, robust-eval, robust-report, robust-all, export, serve, closed-loop, demo"
     }
 }

@@ -90,3 +90,7 @@ robust-all: robust-train robust-eval robust-report
 # closed-loop test of a served policy (start `make serve MODEL=...` first)
 closed-loop:
 	$(PY) -m robust_rl.closed_loop --url http://localhost:8000 --env-id $(RENV) --axis gain --value 1.5 --episodes 3
+
+# visual comparison demo
+demo:
+	$(PY) -m robust_rl.demo --compare --axis action_delay --value 2 --steps 150 --fps 20 --out assets/demo_comparison.gif
