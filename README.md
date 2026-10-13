@@ -13,7 +13,7 @@
 **Institution:** Department of Artificial Intelligence and Machine Learning, REVA University, Bengaluru, India  
 **Software Package:** `sim2real-robustness` (Python package `robust_rl`)  
 **Live Interactive Website:** [sim-to-real-robustness-plum.vercel.app](https://sim-to-real-robustness-plum.vercel.app/)  
-**GitHub Repository:** [Raghunath2604/-Sim-to-Real_Robustness](https://github.com/Raghunath2604/-Sim-to-Real_Robustness.git)
+**GitHub Repository:** [Raghunath2604/Sim-to-Real_Robustness](https://github.com/Raghunath2604/Sim-to-Real_Robustness.git)
 
 
 
@@ -95,7 +95,7 @@ The full study was executed across **20 runs** (4 variants $\times$ 5 seeds) tra
 
 ```bash
 # Clone the repository
-git clone https://github.com/Raghunath2604/-Sim-to-Real_Robustness.git
+git clone https://github.com/Raghunath2604/Sim-to-Real_Robustness.git
 cd -Sim-to-Real_Robustness
 
 # Create and activate virtual environment
@@ -212,7 +212,7 @@ sim2real-robustness/
   author={Raghunathareddy, GR},
   institution={REVA University, Department of AI and ML},
   year={2026},
-  url={https://github.com/Raghunath2604/-Sim-to-Real_Robustness}
+  url={https://github.com/Raghunath2604/Sim-to-Real_Robustness}
 }
 ```
 
