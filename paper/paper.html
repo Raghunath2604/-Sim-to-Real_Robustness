@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quantifying Sim-to-Real Robustness in Proximal Policy Optimization via Domain Randomization</title>
+  <style>
+    @page {
+      size: letter;
+      margin: 0.7in 0.65in;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Times New Roman", Times, "TeX Gyre Termes", serif;
+      font-size: 10pt;
+      line-height: 1.25;
+      color: #000;
+      background: #fff;
+      padding: 0.4in;
+      max-width: 8.5in;
+      margin: 0 auto;
+    }
+    /* Title and Metadata */
+    .paper-header {
+      text-align: center;
+      margin-bottom: 1.2rem;
+    }
+    .paper-title {
+      font-size: 19pt;
+      font-weight: bold;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+    }
+    .author-name {
+      font-size: 11pt;
+      font-weight: bold;
+    }
+    .author-affil {
+      font-size: 9.5pt;
+      font-style: italic;
+      color: #333;
+      margin-top: 2px;
+    }
+    .author-email {
+      font-size: 9pt;
+      font-family: "Courier New", monospace;
+      color: #444;
+    }
+
+    /* Abstract Block */
+    .abstract-box {
+      margin: 0.8rem 1.2rem 1.2rem;
+      font-size: 9pt;
+      text-align: justify;
+      line-height: 1.25;
+    }
+    .abstract-label {
+      font-weight: bold;
+      font-style: italic;
+    }
+    .keywords {
+      margin-top: 0.35rem;
+      font-size: 9pt;
+    }
+    .keywords-label {
+      font-weight: bold;
+      font-style: italic;
+    }
+
+    /* Two-column layout */
+    .columns {
+      column-count: 2;
+      column-gap: 0.28in;
+      text-align: justify;
+    }
+    h2 {
+      font-size: 10pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0.9rem 0 0.35rem;
+      text-align: center;
+      break-after: avoid;
+    }
+    h3 {
+      font-size: 9.5pt;
+      font-weight: bold;
+      font-style: italic;
+      margin: 0.6rem 0 0.25rem;
+      break-after: avoid;
+    }
+    p {
+      text-indent: 1.2em;
+      margin-bottom: 0.4rem;
+    }
+    p.no-indent {
+      text-indent: 0;
+    }
+    ol, ul {
+      margin: 0.3rem 0 0.5rem 1.4em;
+      font-size: 9.5pt;
+    }
+    li {
+      margin-bottom: 0.2rem;
+    }
+
+    /* Equations */
+    .equation {
+      text-align: center;
+      margin: 0.4rem 0;
+      font-style: italic;
+      font-size: 9.5pt;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0.5em;
+    }
+    .eq-num {
+      font-style: normal;
+      font-size: 9pt;
+    }
+
+    /* Tables */
+    .paper-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.6rem 0;
+      font-size: 8.5pt;
+      break-inside: avoid;
+    }
+    .paper-table caption {
+      font-size: 8.5pt;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .paper-table th {
+      border-top: 1.5pt solid #000;
+      border-bottom: 1pt solid #000;
+      padding: 4px 5px;
+      font-weight: bold;
+      text-align: left;
+    }
+    .paper-table td {
+      padding: 3.5px 5px;
+      border-bottom: 0.5pt solid #ccc;
+    }
+    .paper-table tr:last-child td {
+      border-bottom: 1.5pt solid #000;
+    }
+
+    /* Figures */
+    .paper-fig {
+      margin: 0.6rem 0;
+      text-align: center;
+      break-inside: avoid;
+    }
+    .paper-fig img {
+      max-width: 100%;
+      height: auto;
+      border: 0.5pt solid #ddd;
+    }
+    .full-width-fig {
+      column-span: all;
+      margin: 0.8rem 0;
+      text-align: center;
+    }
+    .full-width-fig img {
+      max-width: 98%;
+      height: auto;
+      border: 0.5pt solid #ddd;
+    }
+    .fig-caption {
+      font-size: 8pt;
+      text-align: justify;
+      margin-top: 0.3rem;
+      line-height: 1.2;
+    }
+    .fig-num {
+      font-weight: bold;
+    }
+
+    /* References */
+    .references {
+      font-size: 8pt;
+      line-height: 1.2;
+      margin-top: 0.5rem;
+    }
+    .ref-item {
+      margin-bottom: 0.3rem;
+      text-indent: -1.4em;
+      padding-left: 1.4em;
+    }
+    
+    @media print {
+      body {
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="paper-header">
+    <h1 class="paper-title">Quantifying Sim-to-Real Robustness in Proximal Policy Optimization via Domain Randomization</h1>
+    <div class="author-name">Raghunathareddy GR</div>
+    <div class="author-affil">Department of Artificial Intelligence and Machine Learning, REVA University, Bengaluru, India</div>
+    <div class="author-email">raghunathareddy@reva.edu.in</div>
+  </div>
+
+  <!-- Abstract Block -->
+  <div class="abstract-box">
+    <p class="no-indent">
+      <span class="abstract-label">Abstract&mdash;</span>Deep reinforcement learning policies trained in simulation frequently suffer severe degradation when transferred to physical environments due to unmodeled discrepancies in mass, surface friction, actuator degradation, sensor noise, and communication latencies&mdash;collectively known as the reality gap. In this work, we present an end-to-end empirical study quantifying the performance trade-offs, generalization retention, and out-of-distribution limits of Domain Randomization (DR) in Proximal Policy Optimization (PPO). Evaluated on continuous locomotion dynamics (<tt>HalfCheetah-v5</tt>) across 20 training runs ($20 \times 10^6$ total environment steps) and 500 deterministic evaluation episodes spanning 25 perturbation configurations, our findings demonstrate that: (1) domain randomization induces a monotonic scaling in off-nominal retention rate ($53\% \rightarrow 73\%$) while incurring a modest, predictable penalty in nominal return; (2) physics-only randomization boosts mass resilience by $+81.6\%$ and motor degradation resilience by $+62.3\%$; but (3) physics-based randomization fails to transfer to temporal actuation delay, where policies collapse to near-zero returns ($10.32$). Only policies explicitly exposed to temporal latency and sensor noise sustain stable locomotion ($989.76$, Welch $t$-test $p = 0.03$). Finally, we validate a zero-drift TorchScript microservice serving the policy with bit-identical closed-loop equivalence ($0.000000$ discrepancy) and a $95^{\text{th}}$ percentile latency of $19.52\text{ ms}$.
+    </p>
+    <div class="keywords">
+      <span class="keywords-label">Keywords&mdash;</span>Reinforcement Learning, Sim-to-Real Transfer, Domain Randomization, Proximal Policy Optimization, Robotics, Robust Control.
+    </div>
+  </div>
+
+  <!-- Main Content Columns -->
+  <div class="columns">
+
+    <h2>I. Introduction</h2>
+    <p>
+      Control policies derived via model-free reinforcement learning (RL) have achieved remarkable success in continuous control tasks. However, training directly on physical hardware is prohibitively expensive, sample-inefficient, and hazardous to robotic mechanisms. Consequently, policy synthesis predominantly relies on high-fidelity rigid-body physics engines such as MuJoCo [1].
+    </p>
+    <p>
+      Despite simulator fidelity, deploying simulation-derived policies directly onto physical systems reveals the well-known <em>reality gap</em> [2], [3]. Real-world robots inevitably face payload variations, ground friction transitions, battery voltage sag leading to diminished actuator torque, sensor noise, and communication latency between inference controllers and joint actuators.
+    </p>
+    <p>
+      Domain Randomization (DR) has emerged as a dominant paradigm to mitigate this discrepancy [2], [3], [4], [5]. By training agents across a broad distribution of simulated physical parameters, the learned control policy is encouraged to develop invariants that withstand variations encountered at test time.
+    </p>
+    <p>
+      While DR has demonstrated empirical successes, critical engineering questions remain underspecified:
+    </p>
+    <ol>
+      <li><strong>Nominal Cost vs. Robustness Retention:</strong> What is the quantitative cost of robustness? Does aggressive randomization disproportionately compromise peak nominal performance?</li>
+      <li><strong>Cross-Axis Transfer Limits:</strong> Does physical randomization (e.g., mass and friction) implicitly buffer against non-physical temporal discrepancies such as actuation delay?</li>
+      <li><strong>Production Serving Parity:</strong> Does deploying neural policies behind production inference microservices introduce drift or unacceptable latency?</li>
+    </ol>
+    <p>
+      In this paper, we address these questions through a rigorous, pre-registered benchmark using Proximal Policy Optimization (PPO) [6] on the <tt>HalfCheetah-v5</tt> benchmark [7]. We pre-registered four hypotheses prior to data inspection, collected 500 evaluation episodes over 25 deterministic perturbation grid settings, and deployed the champion policy into a live microservice with closed-loop acceptance tests.
+    </p>
+
+    <h2>II. Problem Formulation</h2>
+    <h3>A. Robust Markov Decision Process</h3>
+    <p>
+      We formulate continuous control under dynamic uncertainty as a Parameterized Markov Decision Process (MDP):
+    </p>
+    <div class="equation">
+      <span>&emsp;&emsp;M<sub>&xi;</sub> = &lang; S, A, P<sub>&xi;</sub>, R, &gamma; &rang;</span>
+      <span class="eq-num">(1)</span>
+    </div>
+    <p>
+      where S &sube; &Ropf;<sup>d</sup> is the continuous state space, A &sube; &Ropf;<sup>m</sup> is the bounded continuous action space, &gamma; &isin; [0, 1) is the discount factor, and R: S &times; A &rarr; &Ropf; is the scalar reward function. The transition probability kernel P<sub>&xi;</sub>(s<sub>t+1</sub> | s<sub>t</sub>, a<sub>t</sub>) is parameterized by an exogenous physical vector &xi; &isin; &Xi;. During nominal training, &xi; = &xi;<sub>0</sub>. Under DR, &xi; &sim; p(&Xi;) is randomized at episode initiation.
+    </p>
+
+    <h3>B. Perturbation Axes</h3>
+    <p>We evaluate five distinct perturbation axes:</p>
+    <ul>
+      <li><strong>Body Mass Multiplier:</strong> m<sub>mult</sub> &isin; [0.5, 1.8], scaling link inertial tensors.</li>
+      <li><strong>Ground Friction Multiplier:</strong> &mu;<sub>mult</sub> &isin; [0.3, 2.0], scaling sliding friction.</li>
+      <li><strong>Actuator Gear Scaling:</strong> g<sub>mult</sub> &isin; [0.6, 1.4], modulating torque authority.</li>
+      <li><strong>Observation Noise:</strong> &sigma;<sub>obs</sub> &isin; [0.0, 0.2], injecting Gaussian noise &epsilon; &sim; N(0, &sigma;<sup>2</sup>I).</li>
+      <li><strong>Actuation Delay:</strong> &tau; &isin; {0, 1, 2} steps, FIFO action queue execution.</li>
+    </ul>
+
+    <h2>III. Experimental Methodology</h2>
+    <h3>A. Pre-Registered Hypotheses</h3>
+    <p>
+      Four hypotheses were pre-registered before inspecting study data:
+    </p>
+    <ul>
+      <li><strong>H1 (Baseline Fragility):</strong> Nominal PPO degrades significantly when evaluated off-distribution across physical perturbation axes.</li>
+      <li><strong>H2 (Randomization Benefit):</strong> Policies trained with DR sustain superior returns along the specific axes randomized during training.</li>
+      <li><strong>H3 (Nominal Cost Trade-off):</strong> Randomization trades off nominal performance; wider distributions exhibit lower nominal returns but higher retention fractions.</li>
+      <li><strong>H4 (Asynchrony Failure):</strong> Physics-only randomization does not transfer to unseen temporal latency; policies collapse unless explicitly exposed to actuation delay.</li>
+    </ul>
+
+    <h3>B. Training Variants</h3>
+    <p>
+      We evaluated four policy variants across 5 independent seeds (S &isin; {1, 2, 3, 4, 5}) trained for 1,000,000 steps each (20 runs total):
+    </p>
+    <ul>
+      <li><tt>baseline</tt>: Nominal physics without randomization (&xi; = &xi;<sub>0</sub>).</li>
+      <li><tt>dr_0.2</tt>: Mild physics randomization (&plusmn;20%).</li>
+      <li><tt>dr_0.5</tt>: Aggressive physics randomization (&plusmn;50%).</li>
+      <li><tt>dr_0.5_sensing</tt>: Aggressive physics DR (&plusmn;50%) + sensor noise (&sigma; = 0.10) + delay jitter (&tau; &isin; {0, 1}).</li>
+    </ul>
+
+    <h2>IV. Empirical Results</h2>
+    
+    <table class="paper-table">
+      <caption>TABLE I: Empirical Benchmark Summary on HalfCheetah-v5 (20 Runs &times; 1M Steps, Mean &plusmn; Std Dev)</caption>
+      <thead>
+        <tr>
+          <th>Variant</th>
+          <th>Nominal Return</th>
+          <th>Retention</th>
+          <th>Worst Floor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><tt>baseline</tt></td>
+          <td><strong>2407.9 &plusmn; 1725.8</strong></td>
+          <td>53% &plusmn; 13%</td>
+          <td>-332.0 &plusmn; 98.9</td>
+        </tr>
+        <tr>
+          <td><tt>dr_0.2</tt></td>
+          <td>2201.6 &plusmn; 1562.0</td>
+          <td>60% &plusmn; 5%</td>
+          <td>-292.0 &plusmn; 227.0</td>
+        </tr>
+        <tr>
+          <td><tt>dr_0.5</tt></td>
+          <td>1889.2 &plusmn; 1287.8</td>
+          <td>70% &plusmn; 5%</td>
+          <td>-252.7 &plusmn; 134.4</td>
+        </tr>
+        <tr>
+          <td><tt>dr_0.5_sensing</tt></td>
+          <td>1918.7 &plusmn; 1682.6</td>
+          <td><strong>73% &plusmn; 11%</strong></td>
+          <td><strong>-101.1 &plusmn; 259.1</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>A. Nominal Cost vs. Retention Scaling</h3>
+    <p>
+      As detailed in Table I, retention rate scales strictly monotonically with domain randomization strength (53% &rarr; 60% &rarr; 70% &rarr; 73%). Meanwhile, nominal return trades off moderately from 2407.92 to 1918.71. This rigorously confirms <strong>Hypothesis H3</strong>.
+    </p>
+    <p>
+      Furthermore, the worst-case return floor improves by 3.3&times;, rising from -331.99 in baseline to -101.09 in <tt>dr_0.5_sensing</tt>, proving that DR serves as a critical safety buffer against severe dynamics disturbances.
+    </p>
+
+    <h3>B. Mass and Actuator Resilience</h3>
+    <p>
+      Under 1.8&times; body mass, baseline returns drop to 599.71 &plusmn; 546.60. Aggressive domain randomization (<tt>dr_0.5</tt>) scales performance to <strong>1089.03 &plusmn; 815.70</strong> (+81.6% improvement). Under motor gear degradation (0.6&times; torque), <tt>dr_0.5</tt> scales returns from 756.44 to <strong>1227.99 &plusmn; 863.40</strong> (+62.3% improvement), validating <strong>Hypothesis H2</strong>.
+    </p>
+
+    <div class="paper-fig">
+      <img src="../results/robust_HalfCheetah-v5/robustness_action_delay.png" alt="Response curves under actuation delay">
+      <div class="fig-caption">
+        <span class="fig-num">Fig. 1.</span> Response under actuation delay (&tau; = 1, 2 steps). Baseline and pure physics DR collapse to near-zero returns. Only <tt>dr_0.5_sensing</tt> maintains stable forward locomotion.
+      </div>
+    </div>
+
+    <h3>C. The Latency Trap: No Cross-Transfer</h3>
+    <p>
+      Fig. 1 illustrates the catastrophic latency collapse. Baseline policies collapse to an average return of <strong>10.32 &plusmn; 8.87</strong> under 2-step delay.
+    </p>
+    <p>
+      Crucially, physics-only randomization (<tt>dr_0.2</tt> and <tt>dr_0.5</tt>) also collapses to 59.92 &plusmn; 61.12 and 170.62 &plusmn; 156.40. Only <tt>dr_0.5_sensing</tt> preserves high-speed locomotion (<strong>989.76 &plusmn; 849.25</strong>). A Welch two-sample t-test confirms statistical significance (&Delta; = +819.14, t = 2.47, <strong>p = 0.03</strong>). This confirms <strong>Hypothesis H4</strong>: physical randomization cannot buffer against temporal latency.
+    </p>
+
+    <h2>V. Real-Time Serving Validation</h2>
+    <p>
+      The champion policy was compiled to TorchScript and deployed via an asynchronous FastAPI REST microservice (<tt>POST /act</tt>). A simulated agent executed 1,000 steps in closed-loop over HTTP under active Gaussian observation noise (&sigma; = 0.20):
+    </p>
+    <ul>
+      <li><strong>Offline Local Return:</strong> 792.0000</li>
+      <li><strong>Served HTTP Return:</strong> 792.0000</li>
+      <li><strong>Drift Discrepancy:</strong> <strong>0.000000</strong> (Bit-identical)</li>
+      <li><strong>Mean Latency:</strong> 10.65 ms (P<sub>95</sub> = 19.52 ms)</li>
+    </ul>
+    <p>
+      Because MuJoCo control cycles operate at 20 ms (50 Hz), the 19.52 ms P<sub>95</sub> latency comfortably satisfies real-time execution bounds without dropping frames.
+    </p>
+
+    <h2>VI. Methodological Transparency</h2>
+    <p>
+      This investigation evaluated robustness using a perturbed MuJoCo simulation environment as an experimental proxy for real-world discrepancies. No physical robot hardware was used. All reported metrics represent empirical measurements.
+    </p>
+
+    <h2>VII. Conclusion</h2>
+    <p>
+      Domain Randomization produces predictable, monotonic gains in off-nominal retention (53% &rarr; 73%) for continuous locomotion. However, physical parameter randomization alone is insufficient to protect against temporal asynchrony. Robotic learning systems must explicitly model temporal delay during training to achieve successful sim-to-real transfer.
+    </p>
+
+    <h2>References</h2>
+    <div class="references">
+      <div class="ref-item">[1] E. Todorov, T. Erez, and Y. Tassa, "MuJoCo: A physics engine for model-based control," in <em>IEEE/RSJ IROS</em>, 2012, pp. 5026-5033.</div>
+      <div class="ref-item">[2] J. Tobin et al., "Domain randomization for transferring deep neural networks from simulation to the real world," in <em>IEEE/RSJ IROS</em>, 2017, pp. 23-30.</div>
+      <div class="ref-item">[3] X. B. Peng et al., "Sim-to-real transfer of robotic control with dynamics randomization," in <em>IEEE ICRA</em>, 2018, pp. 3803-3810.</div>
+      <div class="ref-item">[4] J. Tan et al., "Sim-to-real: Learning agile locomotion for quadruped robots," in <em>Robotics: Science and Systems (RSS)</em>, 2018.</div>
+      <div class="ref-item">[5] M. Andrychowicz et al., "Learning dexterous in-hand manipulation," <em>Int. J. Robot. Res.</em>, vol. 39, no. 1, pp. 3-20, 2020.</div>
+      <div class="ref-item">[6] J. Schulman et al., "Proximal policy optimization algorithms," <em>arXiv:1707.06347</em>, 2017.</div>
+      <div class="ref-item">[7] M. Towers et al., "Gymnasium: A standard interface for reinforcement learning environments," <em>arXiv:2407.17032</em>, 2023.</div>
+      <div class="ref-item">[8] L. Engstrom et al., "Implementation matters in deep policy gradients," <em>arXiv:2005.12729</em>, 2020.</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

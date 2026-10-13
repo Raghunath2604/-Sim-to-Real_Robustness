@@ -7,13 +7,16 @@
 [![Tests Passing](https://img.shields.io/badge/tests-44%2F44%20passing-brightgreen.svg)](tests/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Project Website](https://img.shields.io/badge/Project%20Website-Live%20on%20Vercel-000000.svg?logo=vercel&logoColor=white)](https://sim-to-real-robustness-plum.vercel.app/)
+[![Research Paper](https://img.shields.io/badge/Research%20Paper-Preprint%20PDF-e02424.svg?logo=adobeacrobatreader&logoColor=white)](paper/paper.pdf)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **Author:** Raghunathareddy GR  
 **Institution:** Department of Artificial Intelligence and Machine Learning, REVA University, Bengaluru, India  
 **Software Package:** `sim2real-robustness` (Python package `robust_rl`)  
+**Research Paper Preprint:** [`paper/paper.pdf`](paper/paper.pdf) &bull; [LaTeX Source](paper/paper.tex)  
 **Live Interactive Website:** [sim-to-real-robustness-plum.vercel.app](https://sim-to-real-robustness-plum.vercel.app/)  
 **GitHub Repository:** [Raghunath2604/Sim-to-Real_Robustness](https://github.com/Raghunath2604/Sim-to-Real_Robustness.git)
+
 
 
 
