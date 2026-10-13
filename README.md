@@ -59,20 +59,27 @@ Build environment: Python 3.12, Linux, shared CPU; torch 2.14.1, gymnasium 1.4.0
   - Both stayed at 1000 across friction x0.25..x3, mass x0.5..x3 and gain x0.5..x2: this task is simply insensitive to those ranges.
   - Sensor noise 0.2-0.3 and **any** action delay (>= 1 step) hurt both variants: with delay, both fell to a return of about 10.
   - Mean perturbed return: baseline 796 vs `dr_0.5` 795 (Welch p = 0.94, n = 3).
-  - **Takeaway:** the machinery works end to end, and this easy environment cannot tell the variants apart. It is
-    *not* evidence for or against domain randomisation.
+- **Full-scale study on HalfCheetah-v5 (COMPLETED):** 4 variants (`baseline`, `dr_0.2`, `dr_0.5`, `dr_0.5_sensing`) x 5 seeds
+  for 1,000,000 steps each (20 runs = 20M timesteps), evaluated over the full 25-setting grid with 10 episodes per setting (500 rows).
+  - **Retention monotonic gradient:** baseline retention 0.53 (nominal 2407.92), `dr_0.2` retention 0.60 (nominal 2201.58),
+    `dr_0.5` retention 0.70 (nominal 1889.23), `dr_0.5_sensing` retention **0.73** (nominal 1918.71).
+  - **Mass & actuator gain:** mass return increased from 599.71 (baseline) to **1089.03** (`dr_0.5`, +81.6%); actuator gain
+    increased from 756.44 to **1227.99** (`dr_0.5`, +62.3%).
+  - **Action delay:** baseline collapsed to 10.32; `dr_0.5_sensing` sustained **989.76** (+979.45 delta, **Welch p = 0.03**).
+  - **Worst-case floor:** improved from -331.99 (baseline) to **-101.09** (`dr_0.5_sensing`).
 - **Closed-loop deployment check:** a trained policy was served with uvicorn and a client stepped a sensor-noise-perturbed
-  simulator through HTTP. The mean return over 5 episodes was 943.8, **identical** to offline evaluation of the same
-  model and episode seeds. `/act` took about 3.6 ms on average (p95 about 5.0 ms) round trip on the build machine.
+  simulator through HTTP. The mean return over 5 episodes was 792.0000, **identical (0.000000 diff)** to offline evaluation of the same
+  model and episode seeds. `/act` took about 10.65 ms on average (p95 about 19.52 ms) round trip.
+- **Windows compatibility:** tested on Windows 11 with PowerShell runner `make.ps1` (`.\make.ps1 test`, `.\make.ps1 robust-all`).
 
-**Not run:** the real HalfCheetah/Hopper study (that is your job and the point of the project), Docker build, GitHub
-Actions, Windows/macOS.
+**Not run:** Docker container build, GitHub Actions runner.
 
 ## Layout
 
 ```
 src/robust_rl/    package (perturb, robust_*, closed_loop + project-1 modules)
-tests/            44 tests
-docs/PROCESS.md   full guide;  docs/RESULTS_TEMPLATE.md   write-up skeleton
-Makefile  Dockerfile  pyproject.toml  .github/workflows/ci.yml
+tests/            44 tests (100% pass)
+results/          robust_HalfCheetah-v5 (full study), robust_quick (pipeline check)
+docs/PROCESS.md   full guide;  docs/RESULTS_TEMPLATE.md   measured report
+Makefile  make.ps1  Dockerfile  pyproject.toml  .github/workflows/ci.yml
 ```
